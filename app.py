@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, session
 
 app = Flask(__name__)
 
@@ -12,18 +12,24 @@ counters = {
 
 @app.route('/')
 def home():
-    counters['home'] += 1
-    return render_template('home.html', counter=counters['home'], total=sum(counters.values()))
+    if 'last_page' in session and session['last_page'] != 'home':
+        counters['home'] += 1
+    session['last_page'] = 'home'
+    return render_template('home.html', counter=counters['home'])
 
 @app.route('/tab1')
 def tab1():
-    counters['tab1'] += 1
-    return render_template('tab1.html', counter=counters['tab1'], total=sum(counters.values()))
+    if 'last_page' in session and session['last_page'] != 'tab1':
+        counters['tab1'] += 1
+    session['last_page'] = 'tab1'
+    return render_template('tab1.html', counter=counters['tab1'])
 
 @app.route('/tab2')
 def tab2():
-    counters['tab2'] += 1
-    return render_template('tab2.html', counter=counters['tab2'], total=sum(counters.values()))
+    if 'last_page' in session and session['last_page'] != 'tab2':
+        counters['tab2'] += 1
+    session['last_page'] = 'tab2'
+    return render_template('tab2.html', counter=counters['tab2'])
 
 # API:
 
