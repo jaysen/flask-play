@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, session
 
 app = Flask(__name__)
+app.secret_key = '3d6f45a5fc12445daacdecade11821a3' 
 
 # Initialize counters
 counters = {
