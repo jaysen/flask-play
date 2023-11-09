@@ -1,7 +1,8 @@
 from flask import Flask, render_template, jsonify, session
 
 app = Flask(__name__)
-app.secret_key = '3d6f45a5fc12445daacdecade11821a3' 
+app.secret_key = '3d6f45a5fc12445daacdecade11821a3'
+
 
 # Initialize counters
 counters = {
@@ -11,28 +12,29 @@ counters = {
 }
 
 
+def handle_page(page_name, template_name):
+
+    if 'last_page' in session and session['last_page'] != page_name:
+        counters[page_name] += 1
+    session['last_page'] = page_name
+    return render_template(template_name, counter=counters[page_name])
+
+
 @app.route('/')
 def home():
-    if 'last_page' in session and session['last_page'] != 'home':
-        counters['home'] += 1
-    session['last_page'] = 'home'
-    return render_template('home.html', counter=counters['home'])
+    return handle_page('home', 'home.html')
 
 @app.route('/tab1')
 def tab1():
-    if 'last_page' in session and session['last_page'] != 'tab1':
-        counters['tab1'] += 1
-    session['last_page'] = 'tab1'
-    return render_template('tab1.html', counter=counters['tab1'])
+    return handle_page('tab1', 'tab1.html')
 
 @app.route('/tab2')
 def tab2():
-    if 'last_page' in session and session['last_page'] != 'tab2':
-        counters['tab2'] += 1
-    session['last_page'] = 'tab2'
-    return render_template('tab2.html', counter=counters['tab2'])
+    return handle_page('tab2', 'tab2.html')
 
+####################
 # API:
+####################
 
 @app.route('/api/counters', methods=['GET'])
 def get_counters():
