@@ -25,7 +25,23 @@ def tab2():
     counters['tab2'] += 1
     return render_template('tab2.html', counter=counters['tab2'], total=sum(counters.values()))
 
+# API:
 
+@app.route('/api/counters', methods=['GET'])
+def get_counters():
+    return jsonify(counters)
+
+@app.route('/api/counters/home', methods=['GET'])
+def get_home_counter():
+    return jsonify({'count': counters['home']})
+
+@app.route('/api/counters/tab1', methods=['GET'])
+def get_tab1_counter():
+    return jsonify({'count': counters['tab1']})
+
+@app.route('/api/counters/tab2', methods=['GET'])
+def get_tab2_counter():
+    return jsonify({'count': counters['tab2']})
 
 
 
