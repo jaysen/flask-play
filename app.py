@@ -12,9 +12,11 @@ counters = {
 }
 
 def handle_page(page_name, template_name):
-
-    if 'last_page' in session and session['last_page'] != page_name:
+    if 'last_page' not in session or counters[page_name] == 0 or session['last_page'] != page_name:
+        print('adding to counter ' + page_name)
         counters[page_name] += 1
+    else:
+        print('not adding to counter ' + page_name)
     session['last_page'] = page_name
     return render_template(template_name, counter=counters[page_name], total=sum(counters.values()))
 
@@ -38,7 +40,7 @@ def tab2():
 def get_counters():
     return jsonify(counters)
 
-@app.route('/api/counters/<page>', methods=['GET'])
+@app.route('/api/counter/<page>', methods=['GET'])
 def get_counter(page):
     if page in counters:
         return jsonify({'count': counters[page]})
@@ -54,4 +56,5 @@ def reset_counters():
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run(debug=True)
